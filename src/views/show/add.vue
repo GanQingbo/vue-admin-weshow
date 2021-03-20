@@ -50,7 +50,16 @@
         <el-input type="textarea" v-model="show.showIntro" :autosize="{ minRows: 2, maxRows: 10}"></el-input>
       </el-form-item>
 
-      <!--海报-->
+      <el-form-item label="上传海报">
+        <el-upload
+          class="avatar-uploader"
+          action="http://localhost:81/oss/uploadPoster"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-form-item>
 
       <el-form-item>
         <el-button type="primary" :disabled="saveBtnDisabled" @click="saveOrUpdate">保存</el-button>
@@ -62,8 +71,13 @@
 
 <script>
   import showApi from '@/api/show'
+  import ImageCropper from '@/components/ImageCropper'
+  import PanThumb from '@/components/PanThumb'
 
   export default {
+    components:{ //组件声明
+      ImageCropper,PanThumb
+    },
     data() {
       return {
         types: null,
@@ -103,11 +117,17 @@
             {type: 'date', required: true, message: '请选择演出时间', trigger: 'change'}
           ],
         },
-        saveBtnDisabled: false //保存按钮只能按一次
+        //imagecropperShow:false, //上传弹框是否显示
+        // imagecropperKey:0, //上传组件key值
+        BASE_API:process.env.BASE_API, //
+        saveBtnDisabled: false, //保存按钮只能按一次
+        uploadUrl:process.env.BASE_API+'/oss/uploadPoster',
+        imageUrl:''
       }
     },
     created() { //第一次跳转才执行，
       this.init()
+      //console.log(this.BASE_API);
     },
     watch:{ //监听路由变化
       $route(to,from){ //路由发生变化时，执行方法
@@ -165,7 +185,51 @@
           this.types = response.data.showType
           // console.log(response.data.showType[0].id);
         })
+      },
+      handleAvatarSuccess(data) { //上传后更新showPoster的数据，保存后更新数据库
+        //this.imageUrl = URL.createObjectURL(file.raw);
+        this.imageUrl=data.data.url
+        this.show.showPoster=data.data.url
+        console.log(data.data.url);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
       }
     }
   }
 </script>
+
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>
