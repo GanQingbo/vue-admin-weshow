@@ -53,5 +53,14 @@ export default {
       method:'post',
       data: show,
     })
+  },
+
+  // 获取未上演的演出
+  getShowByTime(page, size, searchObj){
+    return request({
+      url: '/show/show/getShowByPageAndTime/'+ page + '/' + size,
+      method: 'post',
+      data: searchObj
+    })
   }
 }

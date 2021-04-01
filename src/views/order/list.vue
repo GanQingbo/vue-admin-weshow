@@ -80,7 +80,7 @@
     </el-table>
     <div class="block">
 
-      <el-pagination
+      <el-pagination background
         :current-page="page"
         :page-size="size"
         :total="total"

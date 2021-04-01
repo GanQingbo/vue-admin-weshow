@@ -1,7 +1,8 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name:{{ name }}</div>
-    <div class="dashboard-text">roles:<span v-for="role in roles" :key="role">{{ role }}</span></div>
+    <h1>欢迎来到WeShow后台管理系统</h1>
+<!--    <div class="dashboard-text">name:{{ name }}</div>-->
+<!--    <div class="dashboard-text">roles:<span v-for="role in roles" :key="role">{{ role }}</span></div>-->
   </div>
 </template>
 

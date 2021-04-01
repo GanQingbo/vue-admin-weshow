@@ -67,6 +67,43 @@ export const constantRouterMap = [
     ]
   },
 
+  // 售票模块路由
+  {
+    path: '/ticket',
+    component: Layout,
+    redirect: '/ticket/table',
+    name: 'Ticket',
+    meta: {title: '售票管理', icon: 'example'},
+    children: [
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/ticket/ticketList'),
+        meta: {title: '售票列表', icon: 'table'}
+      },
+      {
+        path: 'addList',
+        name: 'AddList',
+        component: () => import('@/views/ticket/ticketAdd'),
+        meta: {title: '添加售票', icon: 'tree'}
+      },
+      {
+        path: 'add/:id', // :id是占位符
+        name: 'Add',
+        component: () => import('@/views/ticket/add'),
+        meta: {title: '添加售票', noCache: true},
+        hidden: true // 隐藏路由
+      },
+      {
+        path: 'edit/:id', // :id是占位符
+        name: 'Edit',
+        component: () => import('@/views/ticket/ticketEdit'), // 同一个页面
+        meta: {title: '售票信息编辑', noCache: true},
+        hidden: true // 隐藏路由
+      }
+    ]
+  },
+
   // 用户管理模块路由
   {
     path: '/user',
@@ -122,7 +159,87 @@ export const constantRouterMap = [
   },
 
   // 管理员模块路由
+  {
+    path: '/manage',
+    component: Layout,
+    redirect: '/manage/table',
+    name: 'Manage',
+    meta: {title: '人员管理', icon: 'example'},
+    children: [
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/show/list'),
+        meta: {title: '演出列表', icon: 'table'}
+      },
+      {
+        path: 'add',
+        name: 'Add',
+        component: () => import('@/views/show/add'),
+        meta: {title: '添加演出', icon: 'tree'}
+      },
+      {
+        path: 'edit/:id', // :id是占位符
+        name: 'Edit',
+        component: () => import('@/views/show/add'), // 同一个页面
+        meta: {title: '演出信息编辑', noCache: true},
+        hidden: true // 隐藏路由
+      }
+    ]
+  },
 
+  // 首页数据管理模块路由
+  {
+    path: '/recommend',
+    component: Layout,
+    redirect: '/recommend/table',
+    name: 'Recommend',
+    meta: {title: '首页管理', icon: 'example'},
+    children: [
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/recommend/list'),
+        meta: {title: '推荐演出', icon: 'table'}
+      },
+      {
+        path: 'add',
+        name: 'Add',
+        component: () => import('@/views/recommend/addList'),
+        meta: {title: '新增推荐', icon: 'tree'}
+      },
+      {
+        path: 'details/:id', // :id是占位符
+        name: 'Details',
+        component: () => import('@/views/recommend/showDetails'),
+        meta: {title: '演出信息详情', noCache: true},
+        hidden: true // 隐藏路由
+      }
+    ]
+  },
+
+  // 数据统计模块路由
+  {
+    path: '/statistics',
+    component: Layout,
+    redirect: '/statistics/table',
+    name: 'Statistics',
+    meta: {title: '数据统计', icon: 'example'},
+    children: [
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/statistics/showList'),
+        meta: {title: '演出数据', icon: 'table'}
+      },
+      {
+        path: 'add',
+        name: 'Add',
+        component: () => import('@/views/statistics/userList'),
+        meta: {title: '用户数据', icon: 'tree'}
+      },
+    ]
+  },
 
   {path: '*', redirect: '/404', hidden: true}
 ]

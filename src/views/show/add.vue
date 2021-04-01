@@ -2,16 +2,16 @@
   <div class="app-container">
     <!--model跟ref对应data中的数据，prop是对应属性名，跟规则名一样-->
     <el-form :model="show" :rules="rules" ref="show" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="演出名称" prop="showName" >
+      <el-form-item label="演出名称" prop="showName">
         <el-input v-model="show.showName" width="120"></el-input>
       </el-form-item>
 
       <el-form-item label="演出类型" prop="showTypeId">
         <el-select v-model="show.showTypeId" clearable placeholder="演出类型">
           <el-option
-            v-for="item in types"
-            :label="item.showType"
-            :value="item.id">
+              v-for="item in types"
+              :label="item.showType"
+              :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>
@@ -29,7 +29,9 @@
       </el-form-item>
 
       <el-form-item label="联系方式" prop="showMobile">
-        <el-input v-model="show.showMobile"></el-input>
+        <el-input v-model="show.showMobile"
+                  maxlength="11"
+                  minlength="11"></el-input>
       </el-form-item>
 
       <el-form-item label="演出时间" required prop="showTime">
@@ -52,20 +54,36 @@
 
       <el-form-item label="上传海报">
         <el-upload
-          class="avatar-uploader"
-          action="http://localhost:81/oss/uploadPoster"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess">
+            class="avatar-uploader"
+            action="http://localhost:81/oss/uploadPoster"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess">
           <img v-if="imageUrl" :src="imageUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
+
+      <el-form-item label="预览海报" >
+        <div class="demo-image__preview">
+          <el-image
+              style="width: 100px; height: 100px"
+              :src="show.showPoster"
+              :preview-src-list="srcList">
+            <div slot="error" class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
+        </div>
+      </el-form-item>
+
 
       <el-form-item>
         <el-button type="primary" :disabled="saveBtnDisabled" @click="saveOrUpdate">保存</el-button>
         <el-button @click="resetData">重置</el-button>
       </el-form-item>
     </el-form>
+
+
   </div>
 </template>
 
@@ -75,8 +93,8 @@
   import PanThumb from '@/components/PanThumb'
 
   export default {
-    components:{ //组件声明
-      ImageCropper,PanThumb
+    components: { //组件声明
+      ImageCropper, PanThumb
     },
     data() {
       return {
@@ -119,43 +137,44 @@
         },
         //imagecropperShow:false, //上传弹框是否显示
         // imagecropperKey:0, //上传组件key值
-        BASE_API:process.env.BASE_API, //
+        BASE_API: process.env.BASE_API, //
         saveBtnDisabled: false, //保存按钮只能按一次
-        uploadUrl:process.env.BASE_API+'/oss/uploadPoster',
-        imageUrl:''
+        uploadUrl: process.env.BASE_API + '/oss/uploadPoster',
+        imageUrl: '',
+        srcList: [],
       }
     },
     created() { //第一次跳转才执行，
       this.init()
       //console.log(this.BASE_API);
     },
-    watch:{ //监听路由变化
-      $route(to,from){ //路由发生变化时，执行方法
+    watch: { //监听路由变化
+      $route(to, from) { //路由发生变化时，执行方法
         this.init()
       }
     },
     methods: {
       saveOrUpdate() { //判断修改还是添加
         this.saveBtnDisabled = true
-        if(!this.show.id){
+        if (!this.show.id) {
           this.saveShow()
-        }else {
+        } else {
           this.updateShow()
         }
       },
       saveShow() { //添加show的方法
         showApi.addShow(this.show).then(response => {
-            //提示信息
-            this.$message({
-              type: 'success',
-              message: '添加成功!'
-            });
-            //回到列表页面 路由跳转
-            this.$router.push({path: '/show/table'})
-          })
+          //提示信息
+          this.$message({
+            type: 'success',
+            message: '添加成功!'
+          });
+          //回到列表页面 路由跳转
+          this.$router.push({path: '/show/table'})
+        })
       },
-      updateShow(){ //修改方法
-        showApi.updateShow(this.show).then(response=>{
+      updateShow() { //修改方法
+        showApi.updateShow(this.show).then(response => {
           //提示信息
           this.$message({
             type: 'success',
@@ -165,20 +184,23 @@
           this.$router.push({path: '/show/table'})
         })
       },
-      getInfo(id){ // 修改时回显数据的方法
-        showApi.getShowInfo(id).then(response=>{
-          this.show=response.data.show
+      getInfo(id) { // 修改时回显数据的方法
+        showApi.getShowInfo(id).then(response => {
+          this.show = response.data.show
+          //this.srcList[0]=this.show.showPoster
+          this.srcList.push(this.show.showPoster)
+          console.log(this.srcList);
         })
       },
       resetData() { //清空表单的数据
         this.show = {}
       },
-      init(){ //把相同的代码抽取出来
+      init() { //把相同的代码抽取出来
         // 判断路径中是否有id值来回显数据
-        if(this.$route.params && this.$route.params.id){
-          const id=this.$route.params.id
+        if (this.$route.params && this.$route.params.id) {
+          const id = this.$route.params.id
           this.getInfo(id)
-        }else{ //清空表单
+        } else { //清空表单
           this.show = {}
         }
         showApi.getShowType().then(response => { //演出类型
@@ -188,8 +210,8 @@
       },
       handleAvatarSuccess(data) { //上传后更新showPoster的数据，保存后更新数据库
         //this.imageUrl = URL.createObjectURL(file.raw);
-        this.imageUrl=data.data.url
-        this.show.showPoster=data.data.url
+        this.imageUrl = data.data.url
+        this.show.showPoster = data.data.url
         console.log(data.data.url);
       },
       beforeAvatarUpload(file) {
@@ -216,9 +238,11 @@
     position: relative;
     overflow: hidden;
   }
+
   .avatar-uploader .el-upload:hover {
     border-color: #409EFF;
   }
+
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
@@ -227,6 +251,7 @@
     line-height: 178px;
     text-align: center;
   }
+
   .avatar {
     width: 178px;
     height: 178px;
