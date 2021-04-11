@@ -55,7 +55,7 @@
       <el-form-item label="上传海报">
         <el-upload
             class="avatar-uploader"
-            action="http://localhost:81/oss/uploadPoster"
+            action="http://localhost:9001/other/oss/uploadPoster"
             :show-file-list="false"
             :on-success="handleAvatarSuccess">
           <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -78,7 +78,7 @@
 
 
       <el-form-item>
-        <el-button type="primary" :disabled="saveBtnDisabled" @click="saveOrUpdate">保存</el-button>
+        <el-button type="primary" @click="saveOrUpdate">保存</el-button>
         <el-button @click="resetData">重置</el-button>
       </el-form-item>
     </el-form>
@@ -89,13 +89,8 @@
 
 <script>
   import showApi from '@/api/show'
-  import ImageCropper from '@/components/ImageCropper'
-  import PanThumb from '@/components/PanThumb'
 
   export default {
-    components: { //组件声明
-      ImageCropper, PanThumb
-    },
     data() {
       return {
         types: null,
