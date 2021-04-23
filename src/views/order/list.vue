@@ -41,7 +41,7 @@
         width="50"
         type="index">
       </el-table-column>
-      <el-table-column prop="orderSn" label="订单号" width="150" align="center"/>
+      <el-table-column prop="orderSn" label="订单号" width="200" align="center"/>
       <el-table-column prop="id" label="订单ID" width="80" align="center"/>
       <el-table-column prop="userId" label="用户ID" width="80" align="center"/>
       <el-table-column prop="showId" label="演出ID" width="80" align="center"/>
@@ -50,8 +50,8 @@
         <template slot-scope="scope">
           <span v-if="scope.row.orderStatus==0">待支付</span>
           <span v-if="scope.row.orderStatus==1">已支付</span>
-          <span v-if="scope.row.orderStatus==2">已关闭</span>
-          <span v-if="scope.row.orderStatus==3">无效单</span>
+          <span v-if="scope.row.orderStatus==2">退票中</span>
+          <span v-if="scope.row.orderStatus==3">已退票</span>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" width="150" align="center"/>

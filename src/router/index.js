@@ -159,7 +159,7 @@ export const constantRouterMap = [
   },
 
   // 管理员模块路由
-  {
+ /* {
     path: '/manage',
     component: Layout,
     redirect: '/manage/table',
@@ -186,7 +186,7 @@ export const constantRouterMap = [
         hidden: true // 隐藏路由
       }
     ]
-  },
+  },*/
 
   // 首页数据管理模块路由
   {

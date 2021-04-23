@@ -43,7 +43,6 @@
       <el-table-column prop="username" label="用户名" width="120" align="center"/>
       <el-table-column prop="nickname" label="用户昵称" width="80" align="center"/>
       <el-table-column prop="mobile" label="手机号码" width="150" align="center"/>
-      <el-table-column prop="header" label="头像" width="80" align="center"/>
       <el-table-column prop="status" label="账号状态" width="150" align="center">
         <template slot-scope="scope">
           <span v-if="scope.row.status==0">禁用</span>
