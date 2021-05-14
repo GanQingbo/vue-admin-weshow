@@ -109,6 +109,22 @@
       resetData(){
         this.searchObj={}
         this.getList()
+      },
+      removeTicketById(id){
+        this.$confirm('记录删除后将无法恢复，是否继续?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => { //调用删除的方法
+          ticket.removeTicket(id)
+            .then(response => { //成功删除，提示信息
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+              this.getList()  //刷新页面
+            })
+        })
       }
     }
   }
